@@ -1,8 +1,5 @@
 from utils import do_move, get_available_moves, board_is_done, one2one
 
-from numba import njit, types
-from numba.typed import List
-
 
 class Solver:
     def __init__(self):
@@ -18,26 +15,9 @@ class Solver:
         self.curr_depth_value = 0
         self.depth_by_call_order = []
 
-        numba_bins = List()
-        for bin in bins:
-            temp = List(lsttype=types.ListType(types.int64))
+        print(bins)
 
-            for ball in bin:
-                temp.append(ball)
-
-            for _ in range(4 - len(bin)):
-                temp.append(-1)
-
-            # numba workaround for the workaround lol
-            if len(temp) == 0:
-                temp.append(bins[0][0])
-                temp.remove(bins[0][0])
-
-            numba_bins.append(temp)
-
-        print(numba_bins)
-
-        self.recurse(moves, numba_bins)
+        self.recurse(moves, bins)
         print(self.solution)
         print(len(self.solution))
         return self.solution
@@ -70,8 +50,8 @@ class Solver:
                 self.solution = curr_moves_seq.copy()
                 self.delete_large()
 
-                if len(self.solution) < 56:
-                    self.halt = True
+                # if len(self.solution) < 56:
+                #     self.halt = True
             return
 
         possible_moves = get_available_moves(bins)

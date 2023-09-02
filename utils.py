@@ -1,6 +1,4 @@
 import numpy as np
-from numba import njit
-from numba.typed import List
 
 
 def mask3dwith2d(im, mask):
@@ -31,7 +29,6 @@ def segment_image(im, minGap=25, pad=5, bgColor=0, axis=0):
     return np.split(im, seperators, axis=axis)[1::2]
 
 
-@njit()
 def board_is_done(bins):
     for b in bins:
         if not bin_is_done(b, empty_is_done=True):
@@ -39,7 +36,6 @@ def board_is_done(bins):
     return True
 
 
-@njit()
 def get_top_ball(bin):
     for ball in bin[::-1]:
         if ball > -1:
@@ -47,7 +43,6 @@ def get_top_ball(bin):
     return -1
 
 
-@njit()
 def pop_top_ball(bin):
     for i, ball in enumerate(bin[::-1]):
         if ball > -1:
@@ -56,7 +51,6 @@ def pop_top_ball(bin):
     return -1
 
 
-@njit()
 def set_top_ball(bin, b):
     for i, ball in enumerate(bin):
         if ball == -1:
@@ -64,7 +58,6 @@ def set_top_ball(bin, b):
             break
 
 
-@njit()
 def bin_is_done(bin, empty_is_done=False):
     if empty_is_done:
         return (bin[0] == bin[1]) and (bin[1] == bin[2]) and (bin[2] == bin[3])
@@ -77,16 +70,14 @@ def bin_is_done(bin, empty_is_done=False):
         )
 
 
-@njit()
 def do_move(bins, i: int, j: int):
     b = pop_top_ball(bins[i])
     set_top_ball(bins[j], b)
 
 
-@njit()
 def get_available_moves(bins):
     num_bins = len(bins)
-    moves = List()
+    moves = []
 
     for from_i in range(num_bins):
         if bin_is_done(bins[from_i]):

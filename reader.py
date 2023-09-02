@@ -3,6 +3,7 @@ from numba import njit
 import numpy as np
 from tqdm import tqdm
 from sklearn import cluster
+from scipy.ndimage import convolve
 
 import os
 from collections import Counter
@@ -123,29 +124,13 @@ class Reader:
             & (np.abs(im[:, :, 1] - im[:, :, 2]) < 5)
         )
 
-    def get_clean_by_blocks_mask(self, im, filter_radius):
-        H, W, _ = im.shape
+    def get_clean_by_blocks_mask(self, im, filter_radius, thresh=25):
+        im_mask = np.any(im > thresh, axis=2).astype(int)
+        kernel = np.ones((filter_radius * 2 + 1, filter_radius * 2 + 1))
 
-        mask_by_block = np.zeros_like(im)[:, :, 0]
-
-        for i in tqdm(
-            range(filter_radius, H - filter_radius),
-            desc="clean filtered image by blocks",
-        ):
-            for j in range(filter_radius, W - filter_radius):
-                sub_im = im[
-                    i - filter_radius : i + filter_radius + 1,
-                    j - filter_radius : j + filter_radius + 1,
-                ]
-
-                r_mask = sub_im[:, :, 0] > 5
-                g_mask = sub_im[:, :, 1] > 5
-                b_mask = sub_im[:, :, 2] > 5
-
-                mask = r_mask | g_mask | b_mask
-                keep_block = mask.all()
-
-                mask_by_block[i, j] = keep_block
+        mask_by_block = (
+            convolve(im_mask, kernel, mode="constant", cval=0.0) == kernel.sum()
+        )
 
         return mask_by_block
 

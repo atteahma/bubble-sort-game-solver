@@ -4,6 +4,7 @@ from creator import Creator
 
 import os
 import pickle as p
+import sys
 
 import pandas as pd
 import plotly.express as px
@@ -21,7 +22,7 @@ def main():
     image_names = os.listdir(input_dir)
 
     for image_name in image_names:
-        if not image_name.startswith("5_1"):
+        if len(sys.argv) > 1 and not image_name.startswith(sys.argv[1]):
             continue
 
         print(f"analyzing image {image_name}...")
