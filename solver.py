@@ -18,6 +18,7 @@ class Solver:
         print(bins)
 
         self.recurse(moves, bins)
+
         print(self.solution)
         print(len(self.solution))
         return self.solution

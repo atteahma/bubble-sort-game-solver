@@ -37,14 +37,14 @@ def board_is_done(bins):
 
 
 def get_top_ball(bin):
-    for ball in bin[::-1]:
+    for ball in reversed(bin):
         if ball > -1:
             return ball
     return -1
 
 
 def pop_top_ball(bin):
-    for i, ball in enumerate(bin[::-1]):
+    for i, ball in reversed(tuple(enumerate(bin))):
         if ball > -1:
             bin[i] = -1
             return ball
@@ -55,7 +55,7 @@ def set_top_ball(bin, b):
     for i, ball in enumerate(bin):
         if ball == -1:
             bin[i] = b
-            break
+            return
 
 
 def bin_is_done(bin, empty_is_done=False):
@@ -68,6 +68,9 @@ def bin_is_done(bin, empty_is_done=False):
             and (bin[1] == bin[2])
             and (bin[2] == bin[3])
         )
+
+def bin_is_full(bin):
+    return bin[3] != -1
 
 
 def do_move(bins, i: int, j: int):
@@ -83,16 +86,21 @@ def get_available_moves(bins):
         if bin_is_done(bins[from_i]):
             continue
 
+        from_b = get_top_ball(bins[from_i])
+
+        if from_b == -1:
+            continue
+
         for to_i in range(num_bins):
             if from_i == to_i:
                 continue
+            
+            if (bin_is_full(bins[to_i])):
+                continue
 
-            from_b = get_top_ball(bins[from_i])
             to_b = get_top_ball(bins[to_i])
 
-            if from_b == -1:
-                continue
-            elif to_b == -1:
+            if to_b == -1:
                 moves.append((from_i, to_i))
             elif from_b == to_b:
                 moves.append((from_i, to_i))

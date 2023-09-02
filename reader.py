@@ -31,7 +31,7 @@ class Reader:
         bins_im = mask3dwith2d(im_crop, bins_mask)
 
         # get only balls
-        block_mask = self.get_clean_by_blocks_mask(bins_im, 20)
+        block_mask = self.get_clean_by_blocks_mask(bins_im, 15)
         balls_im = mask3dwith2d(bins_im, block_mask)
 
         # split image into bins/individual balls ims

@@ -49,7 +49,6 @@ def main():
         ).show()
 
         print(solution)
-        break
 
         print("creating walkthrough...")
         walkthrough = creator.create_walkthrough(solution, bins, color_map, grid_widths)
