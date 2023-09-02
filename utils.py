@@ -69,6 +69,7 @@ def bin_is_done(bin, empty_is_done=False):
             and (bin[2] == bin[3])
         )
 
+
 def bin_is_full(bin):
     return bin[3] != -1
 
@@ -94,8 +95,8 @@ def get_available_moves(bins):
         for to_i in range(num_bins):
             if from_i == to_i:
                 continue
-            
-            if (bin_is_full(bins[to_i])):
+
+            if bin_is_full(bins[to_i]):
                 continue
 
             to_b = get_top_ball(bins[to_i])
@@ -108,5 +109,15 @@ def get_available_moves(bins):
     return moves
 
 
-def one2one(bins):
+def hash_bins(bins):
     return tuple(sorted(map(tuple, bins)))
+
+
+def index_to_ij(index, grid_widths):
+    i = 1
+    for width in grid_widths:
+        if index < width:
+            return i, index + 1
+        index -= width
+        i += 1
+    return None, None

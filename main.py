@@ -37,6 +37,8 @@ def main():
 
         print("done.\n")
 
+        print(bins)
+
         print("solving for optimal solution...")
         solution = solver.solve(bins)
         print("done.\n")
@@ -50,13 +52,15 @@ def main():
 
         print(solution)
 
-        print("creating walkthrough...")
-        walkthrough = creator.create_walkthrough(solution, bins, color_map, grid_widths)
-        success = creator.save_walkthrough(walkthrough, image_name)
-        if not success:
-            print(f"{image_name} FAILED")
-            break
-        print("done.\n")
+        creator.create_guide(solution, grid_widths)
+
+        # print("creating walkthrough...")
+        # walkthrough = creator.create_walkthrough(solution, bins, color_map, grid_widths)
+        # success = creator.save_walkthrough(walkthrough, image_name)
+        # if not success:
+        #     print(f"{image_name} FAILED")
+        #     break
+        # print("done.\n")
 
 
 if __name__ == "__main__":

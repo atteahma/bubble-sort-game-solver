@@ -2,6 +2,8 @@ import cv2
 
 import os
 
+from utils import index_to_ij
+
 
 class Creator:
     def __init__(self, out_size, out_dir):
@@ -11,6 +13,15 @@ class Creator:
     # takes in a solution, initial bin state, and a color map and outputs a video solution
     def create_walkthrough(self, solution, initial_bins, color_map, grid_widths):
         return None
+
+    def create_guide(self, solution, grid_widths):
+        for from_ind, to_ind in solution:
+            from_i, from_j = index_to_ij(from_ind, grid_widths)
+            to_i, to_j = index_to_ij(to_ind, grid_widths)
+
+            print(
+                f"move ball from row {from_i} column {from_j} to row {to_i} column {to_j}"
+            )
 
     # saves a walkthrough to disk
     def save_walkthrough(self, walkthrough, image_name):

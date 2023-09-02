@@ -100,7 +100,6 @@ class Reader:
         return bins_colors
 
     def segment_to_individual(self, im):
-        bins_ims = []
         cols = segment_image(im, pad=0, axis=1)
         rows = segment_image(im, pad=0, axis=0)
         grid_widths = []
@@ -109,12 +108,18 @@ class Reader:
             width = len(segment_image(row, pad=0, axis=1))
             grid_widths.append(width)
 
+        rows_bin_ims = [[] for _ in grid_widths]
+
         for col in cols:
             rows_in_col = segment_image(col, pad=0, axis=0)
             num_bins_vert = len(rows_in_col) // 4
 
             for bucket_i in range(num_bins_vert):
-                bins_ims.append(rows_in_col[4 * bucket_i : 4 * (bucket_i + 1)][::-1])
+                rows_bin_ims[bucket_i].append(
+                    rows_in_col[4 * bucket_i : 4 * (bucket_i + 1)][::-1]
+                )
+
+        bins_ims = [bin_im for row_bin_ims in rows_bin_ims for bin_im in row_bin_ims]
 
         return bins_ims, grid_widths
 

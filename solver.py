@@ -1,4 +1,4 @@
-from utils import do_move, get_available_moves, board_is_done, one2one
+from utils import do_move, get_available_moves, board_is_done, hash_bins
 
 
 class Solver:
@@ -15,12 +15,8 @@ class Solver:
         self.curr_depth_value = 0
         self.depth_by_call_order = []
 
-        print(bins)
-
         self.recurse(moves, bins)
 
-        print(self.solution)
-        print(len(self.solution))
         return self.solution
 
     def recurse(self, curr_moves_seq, bins):
@@ -32,7 +28,7 @@ class Solver:
         if curr_depth >= len(self.solution):
             return
 
-        bins_hashable = one2one(bins)
+        bins_hashable = hash_bins(bins)
         if (
             bins_hashable in self.seen_depths
             and self.seen_depths[bins_hashable] <= curr_depth
